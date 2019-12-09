@@ -61,6 +61,9 @@ class RedisLuaJournal extends \Kdyby\Redis\RedisJournal
 	 */
 	private static function flattenDp(array $array): string
 	{
+		if (isset($array[\Nette\Caching\Cache::TAGS]) && empty($array[\Nette\Caching\Cache::ALL])) {
+			unset($array[\Nette\Caching\Cache::ALL]);
+		}
 		if (isset($array[\Nette\Caching\Cache::TAGS])) {
 			$array[\Nette\Caching\Cache::TAGS] = (array) $array[\Nette\Caching\Cache::TAGS];
 		}
