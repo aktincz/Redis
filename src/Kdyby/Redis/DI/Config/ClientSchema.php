@@ -21,7 +21,7 @@ class ClientSchema implements \Nette\Schema\Schema
 
 		$value = $this->getSchema()->normalize($value, $context);
 
-		if (\array_key_exists('host', $value) && $value['host'][0] === '/') {
+		if (\array_key_exists('host', $value) && !$value['host'] instanceof \Nette\PhpGenerator\PhpLiteral && $value['host'][0] === '/') {
 			$value['port'] = NULL; // sockets have no ports
 
 		} elseif ( ! \array_key_exists('port', $value)) {
@@ -70,11 +70,11 @@ class ClientSchema implements \Nette\Schema\Schema
 	private function getSchema(): \Nette\Schema\Schema
 	{
 		return \Nette\Schema\Expect::structure([
-			'host' => \Nette\Schema\Expect::string('127.0.0.1'),
-			'port' => \Nette\Schema\Expect::int()->nullable(),
+			'host' => \Nette\Schema\Expect::string('127.0.0.1')->dynamic(),
+			'port' => \Nette\Schema\Expect::int()->nullable()->dynamic(),
 			'timeout' => \Nette\Schema\Expect::int(10),
-			'database' => \Nette\Schema\Expect::int(0),
-			'auth' => \Nette\Schema\Expect::string()->nullable(),
+			'database' => \Nette\Schema\Expect::int(0)->dynamic(),
+			'auth' => \Nette\Schema\Expect::string()->nullable()->dynamic(),
 			'persistent' => \Nette\Schema\Expect::bool(FALSE),
 			'connectionAttempts' => \Nette\Schema\Expect::int(1),
 			'lockDuration' => \Nette\Schema\Expect::int(15),

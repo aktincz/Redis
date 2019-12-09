@@ -219,7 +219,11 @@ class RedisExtension extends \Nette\DI\CompilerExtension
 			$savePath = $session['host'];
 
 		} else {
-			$savePath = \sprintf('tcp://%s:%d', $session['host'], $session['port']);
+			$savePath = new \Nette\PhpGenerator\PhpLiteral(
+				'\sprintf(\'tcp://%s:%d\', ' .
+				($session['host'] instanceof \Nette\PhpGenerator\PhpLiteral ? $session['host'] : var_export($session['host'], true)) . ', ' .
+				($session['port'] instanceof \Nette\PhpGenerator\PhpLiteral ? $session['port'] : var_export($session['port'], true)) . ')'
+			);
 		}
 
 		if (!$params['persistent']) {
@@ -230,9 +234,17 @@ class RedisExtension extends \Nette\DI\CompilerExtension
 			unset($params['auth']);
 		}
 
+		$phpParams = [];
+		foreach ($params as $paramKey => $paramValue) {
+			$phpParams[] = var_export($paramKey, true) . ' => ' . ($paramValue instanceof \Nette\PhpGenerator\PhpLiteral ? $paramValue : var_export($paramValue, true));
+		}
+
 		$options = [
 			'saveHandler' => 'redis',
-			'savePath' => $savePath . ($params ? '?' . \http_build_query($params, '', '&') : ''),
+			'savePath' => new \Nette\PhpGenerator\PhpLiteral(
+				($savePath instanceof \Nette\PhpGenerator\PhpLiteral ? $savePath : var_export($savePath, true)) . ' . ' .
+				($params ? '\'?\' . \http_build_query([' . implode(',', $phpParams) . '], \'\', \'&\')' : '')
+			),
 		];
 
 		/** @var \Nette\DI\Definitions\ServiceDefinition $serviceDefinition */
