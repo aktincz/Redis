@@ -148,10 +148,9 @@ class RedisSessionHandler implements \SessionHandlerInterface
 		return TRUE;
 	}
 
-	// phpcs:disable SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint,SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	public function gc($maxLifeTime): int
+	public function gc(int $maxLifeTime): int|false
 	{
-		return 1;
+		return TRUE;
 	}
 
 	protected function lock(string $id): string

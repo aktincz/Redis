@@ -705,46 +705,34 @@ class RedisClient implements \ArrayAccess
 
 	/**
 	 * ArrayAccess method as alias for exists command.
-	 *
-	 * @param mixed $offset
-	 * @return bool
 	 */
-	public function offsetExists($offset): bool
+	public function offsetExists(mixed $offset): bool
 	{
-		return $this->__isset($offset);
+		return $this->__isset((string)$offset);
 	}
 
 	/**
 	 * ArrayAccess method as alias for get command.
-	 *
-	 * @param string|int $offset
-	 * @return mixed
 	 */
-	#[\ReturnTypeWillChange]
-	public function offsetGet($offset)
+	public function offsetGet(mixed $offset): mixed
 	{
-		return $this->__get($offset);
+		return $this->__get((string)$offset);
 	}
 
 	/**
 	 * ArrayAccess method as alias for set command.
-	 *
-	 * @param string|int $offset
-	 * @param mixed $value
 	 */
-	public function offsetSet($offset, $value): void
+	public function offsetSet(mixed $offset, mixed $value): void
 	{
-		$this->__set($offset, $value);
+		$this->__set((string)$offset, $value);
 	}
 
 	/**
 	 * ArrayAccess method as alias for del command.
-	 *
-	 * @param mixed $offset
 	 */
-	public function offsetUnset($offset): void
+	public function offsetUnset(mixed $offset): void
 	{
-		$this->__unset($offset);
+		$this->__unset((string)$offset);
 	}
 
 }
